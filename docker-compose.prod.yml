@@ -2,10 +2,10 @@ version: '3.7'
 
 services:
 
-  sample-prod:
+  rocket-prod:
     container_name: rocket-prod
     build:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - '1337:80'
+      - 1337:3000
