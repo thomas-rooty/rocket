@@ -1,0 +1,12 @@
+.player {
+  min-height: 800px;
+  width: 20%;
+}
+.player .picturesPlayer {
+  height: 300px;
+  background-color: blue;
+}
+.player .ContentPlayer .indicatorPlayer {
+  display: flex;
+  justify-content: center;
+}

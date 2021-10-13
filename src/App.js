@@ -1,10 +1,20 @@
 import './App.css';
-import { Link , BrowserRouter } from 'react-router-dom'; 
-import Autocomplete from '@mui/material/Autocomplete';
+import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
   return (
-    <h1> Hello World </h1>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <MusicPlayer/>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
