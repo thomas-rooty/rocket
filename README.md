@@ -2,13 +2,14 @@
 
 ## Lancer l'app
 
-Lancer l'environnement de dév (port 3001:3000) :
+### Linux
+Lancer l'environnement de dév (localhost:3001) :
 ```bash
-docker-compose -f .\docker-compose.yml up -d --build
+sudo bash start.sh
 ```
 
-Lancer l'environnement de prod avec nginx (port 1337:80) :
+### Windows
+Lancer l'environnement de dév (localhost:3001) :
 ```bash
-docker-compose -f .\docker-compose.prod.yml up -d --build
+./windows-start.bat
 ```
-
