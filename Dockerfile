@@ -1,7 +1,7 @@
 # pull the official base image
 FROM node:alpine
 # set working direction
-RUN adduser rocketusr
+RUN adduser -d rocketusr
 USER rocketusr
 WORKDIR /home/rocketusr
 # add `/app/node_modules/.bin` to $PATH
