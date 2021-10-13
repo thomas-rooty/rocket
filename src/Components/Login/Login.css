@@ -7,4 +7,10 @@
       margin: 0 auto;
       max-width: 320px;
     }
+
+    .Login button {
+      margin-top: 15px;
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
