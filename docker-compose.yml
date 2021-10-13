@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  rocket-app:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - .:/app
+    ports:
+      - '3001:3000'
