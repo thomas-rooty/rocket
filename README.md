@@ -1,5 +1,7 @@
 # Rocket App sisi les réacteurs !
 
+![Rocket App](https://i.imgur.com/UvtlWag.png)
+
 ## Lancer l'app
 
 ### Linux
