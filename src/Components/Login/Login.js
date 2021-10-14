@@ -6,8 +6,10 @@ import "./Login.css";
 import verifyLogin from "../../api/verifyLogin";
 import { login, logout} from "../../utils";
 import { sha512 } from 'js-sha512';
+import { useHistory } from "react-router";
 
-export default function Login() {
+export default function Login(props) {
+    const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -21,7 +23,11 @@ export default function Login() {
         .then(data=>{
             if (data.length > 0) {
                 login(data[0].UserID);
-                console.log("User logged in !");
+                setTimeout(() => {
+                    history.push({
+                      pathname : '/player'
+                    })
+                  }, 500)
             }
         })
     }
