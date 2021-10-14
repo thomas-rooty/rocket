@@ -3,7 +3,8 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
-import getUsers from "../../api/getUsers";
+import verifyLogin from "../../api/verifyLogin";
+import { login, logout} from "../../utils";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -14,10 +15,14 @@ export default function Login() {
     }
 
     function handleSubmit(event) {
-        console.log("Submitted inputs by user :");
-        console.log("Email : " + email);
-        console.log("Password : " + password);
         event.preventDefault();
+        verifyLogin(email, password)
+        .then(data=>{
+            if (data.length > 0) {
+                login(data[0].UserID);
+                console.log("User logged in !");
+            }
+        })
     }
 
     return (
