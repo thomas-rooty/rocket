@@ -255,7 +255,7 @@ class MusicPlayer extends Component{
     return (
   <div>
     <div className="Navbar">
-      <input type="search" onChange={this.searchTracks}/>
+      <input type="text" onChange={this.searchTracks}/>
     </div>
     <div className="player">
       <div className="musicInfos">
