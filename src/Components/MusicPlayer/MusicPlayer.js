@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import './MusicPlayer.css';
 
 //icons
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-
-import ReplayIcon from '@mui/icons-material/Replay';
+import VolumeUp from '../icons/VolumeUppIcon.svg';
+import VolumeOffIcon from '../icons/VolumeDownIcon.svg';
+import VolumeDown from '../icons/VolumeOffIcon.svg';
+import ReplayIcon from '../icons/loop.svg';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PauseIcon from '@mui/icons-material/Pause';
+import SkipNextIcon from '../icons/next.svg';
+import SkipPreviousIcon from '../icons/previous.svg';
+import PlayIcon from '../icons/play.svg';
+import PauseIcon from '../icons/pause.svg';
+import BlankIcon from '../icons/blank.png';
 
 // api
 
@@ -17,8 +19,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import SliderMui from '../slider/Slider';
-import VolumeDown from '@mui/icons-material/VolumeDown';
-import VolumeUp from '@mui/icons-material/VolumeUp';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 
@@ -303,26 +303,28 @@ class MusicPlayer extends Component {
           <div className="ContentPlayer">
 
             <div className="indicatorPlayer">
-              <ReplayIcon onClick={this.loop} />
-              <SkipPreviousIcon
+              <img src={ReplayIcon} onClick={this.loop} />
+              <img src={SkipPreviousIcon}
                 onClick={this.DownIndex}
                 style={{
                   color: this.state.currentMusicIndex - 1 < 0 && '#F8F8F8'
                 }} />
               {
                 !this.state.play
-                  ? <PlayArrowIcon onClick={() => { this.PlayMusic('play') }} />
-                  : <PauseIcon onClick={() => { this.PlayMusic('pause') }} />
+                  ? <img src={PlayIcon} onClick={() => { this.PlayMusic('play') }} />
+                  : <img src={PauseIcon} onClick={() => { this.PlayMusic('pause') }} />
               }
-              <SkipNextIcon onClick={this.UpIndex}
+              <img src={SkipNextIcon} onClick={this.UpIndex}
                 style={{
                   color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
                 }} />
+              <img src={BlankIcon}
+                style={{}} />
 
 
             </div>
             <div className="ProgressBarPlayer">
-              <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange} />
+              <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange} style={{ width: 600 }} />
             </div>
           </div>
           <div className="volumeSlider">
@@ -330,18 +332,14 @@ class MusicPlayer extends Component {
               <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
                 {
                   this.state.volume > 0
-                    ? <VolumeDown />
-                    : <VolumeOffIcon />
+                    ? <img src={VolumeOffIcon} />
+                    : <img src={VolumeDown} />
                 }
 
                 <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
-                <VolumeUp />
+                <img src={VolumeUp} />
               </Stack>
             </Box>
-            <SkipNextIcon onClick={this.UpIndex}
-              style={{
-                color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
-              }} />
           </div>
         </div>
         <div className="ListOfTracks">

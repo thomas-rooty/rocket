@@ -7,7 +7,7 @@
   height: 149px;
   width: 100%;
   background-color: #1B041E;
-
+  
 }
 
 .musicInfos{
@@ -25,26 +25,33 @@
   justify-content: center;
   width: 20%;
   height: 100%;
+  padding-right: 2vh;
 }
 .ContentPlayer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 60%;
 }
+
 .progressBarPlayer{
-  background-color: red;
+  width: 100%;
 }
 .indicatorPlayer{
+  display: flex;
+  align-items: center;
+  width: 40%;
   background-color: green;
 }
 .player .picturesPlayer {
   height: 100px;
-  width: 100px;
+  min-width: 100px;
   background-size: cover;
   background-position: center center;
 }
 .player .nameSong{
   color: white;
 }
-
 .player .ContentPlayer .indicatorPlayer {
   display: flex;
   justify-content: center;
