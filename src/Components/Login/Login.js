@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Login.css";
 import verifyLogin from "../../api/verifyLogin";
 import { login, logout} from "../../utils";
+import { sha512 } from 'js-sha512';
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        verifyLogin(email, password)
+        verifyLogin(email, sha512(password))
         .then(data=>{
             if (data.length > 0) {
                 login(data[0].UserID);
