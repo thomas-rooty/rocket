@@ -11,3 +11,10 @@
   display: flex;
   justify-content: center;
 }
+.Tracks {
+  display: flex;
+}
+.Tracks img {
+  max-width: 150px;
+  max-height: 150px;
+}

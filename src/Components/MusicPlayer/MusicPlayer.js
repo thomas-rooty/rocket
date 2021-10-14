@@ -64,20 +64,20 @@ function LinearProgressWithLabel(props) {
     </Box>
   );
 }
-class MusicPlayer extends Component{
+class MusicPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      musicIndex : 0,
-      loadedDataMusic : false,
-      play : false,
-      audio : new Audio(),
-      data : [],
-      firstLog : false,
-      reload : false,
-      duration : 0,
-      timePlayed : 0,
-      volume : 100,
+      musicIndex: 0,
+      loadedDataMusic: false,
+      play: false,
+      audio: new Audio(),
+      data: [],
+      firstLog: false,
+      reload: false,
+      duration: 0,
+      timePlayed: 0,
+      volume: 100,
     }
     this.myRef = React.createRef()
     this.killAudio = this.killAudio.bind(this);
@@ -87,81 +87,93 @@ class MusicPlayer extends Component{
     this.PlayMusic = this.PlayMusic.bind(this);
     this.onChange = this.onChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.TrackChangeMusic = this.TrackChangeMusic.bind(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     getMusic().then(
       result => this.setState({
-        data : result,
-        firstLog : true,
+        data: result,
+        firstLog: true,
       }, () => {
         this.state.audio.setAttribute('src', result[this.state.musicIndex]['mp3'])
         this.state.audio.addEventListener('loadedmetadata', (e) => {
           this.setState({
-            duration : e.target.duration
+            duration: e.target.duration
           })
         });
       })
     )
   }
-   killAudio(x){
-     this.state.audio.pause()
-     this.setState({
-       play : true,
-       musicIndex : x,
-     }, () => {
-       console.log(this.state.audio)
-       this.state.audio.setAttribute('src', this.state.data[this.state.musicIndex]['mp3'])
-       this.state.audio.play()
-     })
+  TrackChangeMusic(e) {
+    let x = 0;
+    this.state.data.map(
+      row => {
+        if (row.MusicID === e - 1) {
+          x = row.MusicID
+        }
+      }
+    )
+    this.killAudio(x)
   }
-   UpIndex(){
+  killAudio(x) {
+    console.log(x)
+    this.state.audio.pause()
+    this.setState({
+      play: true,
+      musicIndex: x,
+    }, () => {
+      console.log(this.state.audio)
+      this.state.audio.setAttribute('src', this.state.data[this.state.musicIndex]['mp3'])
+      this.state.audio.play()
+    })
+  }
+  UpIndex() {
     let x = this.state.musicIndex + 1;
     if (x < this.state.data.length) {
       this.killAudio(x)
     }
   }
-   DownIndex(){
+  DownIndex() {
     let x = this.state.musicIndex - 1;
-    if (x >= 0){
+    if (x >= 0) {
       this.killAudio(x)
     }
   }
-   loop(){
+  loop() {
     this.state.audio.loop = true
   }
-   PlayMusic(state){
+  PlayMusic(state) {
     if (state === 'play') {
       this.state.audio.play();
       this.setState({
-        play : true
+        play: true
       })
     } else if (state === 'pause') {
       this.state.audio.pause();
       this.setState({
-        play : false
+        play: false
       })
     }
   }
-    handleChange(e){
-      this.setState({
-        volume : e.target.value,
-      })
-    }
-    onChange(e) {
-      var x = (this.state.audio.duration / 100) * e.target.value
-      this.state.audio.currentTime = x
-      this.setState({
-        timePlayed : x
-      })
-    }
-   render(){
-     console.log(this.state.volume)
-     setTimeout(() => {
-     if (this.state.play){
-       this.setState({
-         timePlayed : this.state.audio.currentTime
-       })
-     }
+  handleChange(e) {
+    this.setState({
+      volume: e.target.value,
+    })
+  }
+  onChange(e) {
+    var x = (this.state.audio.duration / 100) * e.target.value
+    this.state.audio.currentTime = x
+    this.setState({
+      timePlayed: x
+    })
+  }
+  render() {
+    setTimeout(() => {
+      if (this.state.play) {
+        this.setState({
+          timePlayed: this.state.audio.currentTime
+        })
+      }
     }, 500);
     if (this.state.firstLog) {
       if (this.state.play === true) {
@@ -172,56 +184,73 @@ class MusicPlayer extends Component{
     }
     this.state.audio.volume = this.state.volume / 100
     return (
-
-      <div className="player">
+      <div>
+        <div className="player">
           <div className="picturesPlayer" style={{
-            backgroundImage : this.state.data[this.state.musicIndex] && `url(${this.state.data[this.state.musicIndex]['Pictures']})`
+            backgroundImage: this.state.data[this.state.musicIndex] && `url(${this.state.data[this.state.musicIndex]['Pictures']})`
           }}>
-          <div className="NameSong">
-            <h5>
-            {
-              this.state.data[this.state.musicIndex]
-              && this.state.data[this.state.musicIndex]['Titre']
-            }
-            </h5>
+            <div className="NameSong">
+              <h5>
+                {
+                  this.state.data[this.state.musicIndex]
+                  && this.state.data[this.state.musicIndex]['Titre']
+                }
+              </h5>
+            </div>
+          </div>
+          <div className="ContentPlayer">
+            <div className="ProgressBarPlayer">
+              <SliderMui percentage={this.state.firstLog && this.state.timePlayed / this.state.duration * 100} onChange={this.onChange} />
+            </div>
+            <div className="indicatorPlayer">
+              <ReplayIcon onClick={this.loop} />
+              <SkipPreviousIcon
+                onClick={this.DownIndex}
+                style={{
+                  color: this.state.musicIndex - 1 < 0 && '#F8F8F8'
+                }} />
+              {
+                !this.state.play
+                  ? <PlayArrowIcon onClick={() => { this.PlayMusic('play') }} />
+                  : <PauseIcon onClick={() => { this.PlayMusic('pause') }} />
+              }
+
+              <Box sx={{ width: 200 }}>
+                <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                  {
+                    this.state.volume > 0
+                      ? <VolumeDown />
+                      : <VolumeOffIcon />
+                  }
+
+                  <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
+                  <VolumeUp />
+                </Stack>
+              </Box>
+              <SkipNextIcon onClick={this.UpIndex}
+                style={{
+                  color: this.state.musicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
+                }} />
+            </div>
           </div>
         </div>
-        <div className="ContentPlayer">
-          <div className="ProgressBarPlayer">
-            <SliderMui percentage={this.state.timePlayed / this.state.duration * 100} onChange={this.onChange}/>
-          </div>
-          <div className="indicatorPlayer">
-            <ReplayIcon onClick={this.loop}/>
-            <SkipPreviousIcon
-              onClick={this.DownIndex}
-              style = {{
-                color : this.state.musicIndex -1 < 0 && '#F8F8F8'
-              }}/>
-            {
-              !this.state.play
-              ? <PlayArrowIcon onClick={() => {this.PlayMusic('play')}}/>
-            : <PauseIcon onClick={() => {this.PlayMusic('pause')}}/>
-            }
+        <div className="ListOfTracks">
+          {
+            this.state.data.length > 0
+            && this.state.data.map(
+              row =>
+                <div className="Tracks" key={row.MusicID} onClick={() => { this.TrackChangeMusic(row.MusicID) }}>
+                  <img src={row.Pictures} />
+                  <h5>{row.Titre}</h5>
+                  <h5>{row.Auteur}</h5>
+                  <h5>{row.Genre}</h5>
+                </div>
 
-            <Box sx={{ width: 200 }}>
-              <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                {
-                  this.state.volume > 0
-                  ? <VolumeDown />
-                : <VolumeOffIcon/>
-                }
-
-                <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
-                <VolumeUp />
-              </Stack>
-            </Box>
-            <SkipNextIcon onClick={this.UpIndex}
-              style = {{
-                color : this.state.musicIndex +1 > this.state.data.length -1 && '#F8F8F8'
-              }}/>
-          </div>
+            )
+          }
         </div>
       </div>
+
     )
   }
 }
