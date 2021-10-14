@@ -65,28 +65,28 @@ function LinearProgressWithLabel(props) {
     </Box>
   );
 }
-class MusicPlayer extends Component{
+class MusicPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadedDataMusic : false,
-      play : false,
-      audio : new Audio(),
-      data : [],
-      firstLog : false,
-      reload : false,
-      volume : 100,
+      loadedDataMusic: false,
+      play: false,
+      audio: new Audio(),
+      data: [],
+      firstLog: false,
+      reload: false,
+      volume: 100,
 
-      currentmp3 : '',
-      currentPictures : '',
-      currentMusicId : '',
-      currentAlbum : '',
-      currentAuteur : '',
-      currentGenre : '',
-      currentTitre : '',
-      currentDuration : 0,
-      currentPlayed : 0,
-      currentMusicIndex : 0,
+      currentmp3: '',
+      currentPictures: '',
+      currentMusicId: '',
+      currentAlbum: '',
+      currentAuteur: '',
+      currentGenre: '',
+      currentTitre: '',
+      currentDuration: 0,
+      currentPlayed: 0,
+      currentMusicIndex: 0,
     }
     this.myRef = React.createRef()
     this.killAudio = this.killAudio.bind(this);
@@ -99,148 +99,176 @@ class MusicPlayer extends Component{
     this.TrackChangeMusic = this.TrackChangeMusic.bind(this);
     this.searchTracks = this.searchTracks.bind(this);
   }
-  componentDidMount(){
+  componentDidMount() {
     this.state.audio.pause()
     getMusic().then(
       result => {
         this.setState({
-          firstLog : true,
-          data : result,
-          currentMusicId : result[this.state.currentMusicIndex]['MusicId'],
-          currentmp3 : result[this.state.currentMusicIndex]['mp3'],
-          currentPictures : result[this.state.currentMusicIndex]['Pictures'],
-          currentMusicId : result[this.state.currentMusicIndex]['PMusicId'],
-          currentAlbum : result[this.state.currentMusicIndex]['Album'],
-          currentAuteur : result[this.state.currentMusicIndex]['Auteur'],
-          currentGenre : result[this.state.currentMusicIndex]['Genre'],
-          currentTitre : result[this.state.currentMusicIndex]['Titre'],
-          audio : new Audio(result[this.state.currentMusicIndex ]['mp3'])
+          firstLog: true,
+          data: result,
+          currentMusicId: result[this.state.currentMusicIndex]['MusicId'],
+          currentmp3: result[this.state.currentMusicIndex]['mp3'],
+          currentPictures: result[this.state.currentMusicIndex]['Pictures'],
+          currentMusicId: result[this.state.currentMusicIndex]['PMusicId'],
+          currentAlbum: result[this.state.currentMusicIndex]['Album'],
+          currentAuteur: result[this.state.currentMusicIndex]['Auteur'],
+          currentGenre: result[this.state.currentMusicIndex]['Genre'],
+          currentTitre: result[this.state.currentMusicIndex]['Titre'],
+          audio: new Audio(result[this.state.currentMusicIndex]['mp3'])
         }, () => {
           this.state.audio.addEventListener('loadedmetadata', (e) => {
             this.setState({
-              currentDuration : e.target.duration
+              currentDuration: e.target.duration
             })
           })
         })
       }
     )
   }
-  searchTracks(e){
-    searchSongs(e.target.value).then(
-      songs => {
-        this.setState({
-          data : songs
-        })
-      }
-    )
+  searchTracks(e) {
+    if (e.target.value == '') {
+      this.state.audio.pause()
+      getMusic().then(
+        result => {
+          this.setState({
+            firstLog: true,
+            data: result,
+            currentMusicId: result[this.state.currentMusicIndex]['MusicId'],
+            currentmp3: result[this.state.currentMusicIndex]['mp3'],
+            currentPictures: result[this.state.currentMusicIndex]['Pictures'],
+            currentMusicId: result[this.state.currentMusicIndex]['PMusicId'],
+            currentAlbum: result[this.state.currentMusicIndex]['Album'],
+            currentAuteur: result[this.state.currentMusicIndex]['Auteur'],
+            currentGenre: result[this.state.currentMusicIndex]['Genre'],
+            currentTitre: result[this.state.currentMusicIndex]['Titre'],
+            audio: new Audio(result[this.state.currentMusicIndex]['mp3'])
+          }, () => {
+            this.state.audio.addEventListener('loadedmetadata', (e) => {
+              this.setState({
+                currentDuration: e.target.duration
+              })
+            })
+          })
+        }
+      )
+    } else {
+      searchSongs(e.target.value).then(
+        songs => {
+          this.setState({
+            data: songs
+          })
+        }
+      )
+    }
+
   }
-  TrackChangeMusic(x){
+  TrackChangeMusic(x) {
     this.killAudio(x)
     this.setState({
-      currentMusicId : this.state.data[x]['MusicId'],
-      currentmp3 : this.state.data[x]['mp3'],
-      currentPictures : this.state.data[x]['Pictures'],
-      currentMusicId : this.state.data[x]['PMusicId'],
-      currentAlbum : this.state.data[x]['Album'],
-      currentAuteur : this.state.data[x]['Auteur'],
-      currentGenre : this.state.data[x]['Genre'],
-      currentTitre : this.state.data[x]['Titre'],
-      audio : new Audio(this.state.data[x]['mp3'])
+      currentMusicId: this.state.data[x]['MusicId'],
+      currentmp3: this.state.data[x]['mp3'],
+      currentPictures: this.state.data[x]['Pictures'],
+      currentMusicId: this.state.data[x]['PMusicId'],
+      currentAlbum: this.state.data[x]['Album'],
+      currentAuteur: this.state.data[x]['Auteur'],
+      currentGenre: this.state.data[x]['Genre'],
+      currentTitre: this.state.data[x]['Titre'],
+      audio: new Audio(this.state.data[x]['mp3'])
     }, () => {
       this.state.audio.addEventListener('loadedmetadata', (e) => {
         this.setState({
-          currentDuration : e.target.duration
+          currentDuration: e.target.duration
         })
       })
     })
   }
-  killAudio(x){
-     this.state.audio.pause()
-     this.setState({
-       play : true,
-       currentMusicIndex : x,
-     })
+  killAudio(x) {
+    this.state.audio.pause()
+    this.setState({
+      play: true,
+      currentMusicIndex: x,
+    })
   }
   //
-  UpIndex(){
+  UpIndex() {
     let x = this.state.currentMusicIndex + 1;
     if (x < this.state.data.length) {
       this.killAudio(x)
       this.setState({
-        currentMusicId : this.state.data[x]['MusicId'],
-        currentmp3 : this.state.data[x]['mp3'],
-        currentPictures : this.state.data[x]['Pictures'],
-        currentMusicId : this.state.data[x]['PMusicId'],
-        currentAlbum : this.state.data[x]['Album'],
-        currentAuteur : this.state.data[x]['Auteur'],
-        currentGenre : this.state.data[x]['Genre'],
-        currentTitre : this.state.data[x]['Titre'],
-        audio : new Audio(this.state.data[x]['mp3'])
+        currentMusicId: this.state.data[x]['MusicId'],
+        currentmp3: this.state.data[x]['mp3'],
+        currentPictures: this.state.data[x]['Pictures'],
+        currentMusicId: this.state.data[x]['PMusicId'],
+        currentAlbum: this.state.data[x]['Album'],
+        currentAuteur: this.state.data[x]['Auteur'],
+        currentGenre: this.state.data[x]['Genre'],
+        currentTitre: this.state.data[x]['Titre'],
+        audio: new Audio(this.state.data[x]['mp3'])
       }, () => {
         this.state.audio.addEventListener('loadedmetadata', (e) => {
           this.setState({
-            currentDuration : e.target.duration
+            currentDuration: e.target.duration
           })
         })
       })
     }
   }
-  DownIndex(){
+  DownIndex() {
     let x = this.state.currentMusicIndex - 1;
-    if (x >= 0){
+    if (x >= 0) {
       this.killAudio(x)
       this.setState({
-        currentMusicId : this.state.data[x]['MusicId'],
-        currentmp3 : this.state.data[x]['mp3'],
-        currentPictures : this.state.data[x]['Pictures'],
-        currentMusicId : this.state.data[x]['PMusicId'],
-        currentAlbum : this.state.data[x]['Album'],
-        currentAuteur : this.state.data[x]['Auteur'],
-        currentGenre : this.state.data[x]['Genre'],
-        currentTitre : this.state.data[x]['Titre'],
-        audio : new Audio(this.state.data[x]['mp3'])
-      }, ()  => {
+        currentMusicId: this.state.data[x]['MusicId'],
+        currentmp3: this.state.data[x]['mp3'],
+        currentPictures: this.state.data[x]['Pictures'],
+        currentMusicId: this.state.data[x]['PMusicId'],
+        currentAlbum: this.state.data[x]['Album'],
+        currentAuteur: this.state.data[x]['Auteur'],
+        currentGenre: this.state.data[x]['Genre'],
+        currentTitre: this.state.data[x]['Titre'],
+        audio: new Audio(this.state.data[x]['mp3'])
+      }, () => {
         this.state.audio.addEventListener('loadedmetadata', (e) => {
           this.setState({
-            currentDuration : e.target.duration
+            currentDuration: e.target.duration
           })
         })
       })
     }
   }
-  loop(){
+  loop() {
     this.state.audio.loop = true
   }
-  PlayMusic(state){
+  PlayMusic(state) {
     if (state === 'play') {
       this.state.audio.play();
       this.setState({
-        play : true
+        play: true
       })
     } else if (state === 'pause') {
       this.state.audio.pause();
       this.setState({
-        play : false
+        play: false
       })
     }
   }
-  handleChange(e){
+  handleChange(e) {
     this.setState({
-        volume : e.target.value,
-      })
+      volume: e.target.value,
+    })
   }
   onChange(e) {
     var x = (this.state.currentDuration / 100) * e.target.value
     this.state.audio.currentTime = x
     this.setState({
-      currentPlayed : x
+      currentPlayed: x
     })
   }
-  render(){
+  render() {
     setTimeout(() => {
-      if (this.state.play){
+      if (this.state.play) {
         this.setState({
-          currentPlayed : this.state.audio.currentTime
+          currentPlayed: this.state.audio.currentTime
         })
       }
     }, 500);
@@ -253,86 +281,86 @@ class MusicPlayer extends Component{
     }
     this.state.audio.volume = this.state.volume / 100
     return (
-  <div>
-    <div className="Navbar">
-      <input type="text" onChange={this.searchTracks}/>
-    </div>
-    <div className="player">
-      <div className="musicInfos">
-        <div className="picturesPlayer" style={{
-          backgroundImage: `url(${this.state.currentPictures})`
-        }}>
+      <div>
+        <div className="Navbar">
+          <input type="search" onChange={this.searchTracks} />
         </div>
-        <div className="nameSong">
-          <h5>
-            {
-              this.state.currentTitre
-            }
-          </h5>
-        </div>
-      </div>
-
-      <div className="ContentPlayer">
-
-        <div className="indicatorPlayer">
-          <ReplayIcon onClick={this.loop} />
-          <SkipPreviousIcon
-            onClick={this.DownIndex}
-            style={{
-              color: this.state.currentMusicIndex - 1 < 0 && '#F8F8F8'
-            }} />
-          {
-            !this.state.play
-              ? <PlayArrowIcon onClick={() => { this.PlayMusic('play') }} />
-              : <PauseIcon onClick={() => { this.PlayMusic('pause') }} />
-          }
-          <SkipNextIcon onClick={this.UpIndex}
-            style={{
-              color: this.state.currentMusicIndex +1 > this.state.data.length -1 && '#F8F8F8'
-            }} />
-
-
-        </div>
-        <div className="ProgressBarPlayer">
-          <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange} />
-        </div>
-      </div>
-      <div className="volumeSlider">
-        <Box sx={{ width: '100%' }}>
-          <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-            {
-              this.state.volume > 0
-                ? <VolumeDown />
-                : <VolumeOffIcon />
-            }
-
-            <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
-            <VolumeUp />
-          </Stack>
-        </Box>
-        <SkipNextIcon onClick={this.UpIndex}
-          style={{
-            color: this.state.currentMusicIndex +1 > this.state.data.length -1 && '#F8F8F8'
-          }} />
-      </div>
-    </div>
-    <div className="ListOfTracks">
-      {
-        this.state.data.length > 0
-        && this.state.data.map(
-          (row,index) =>
-          <div className="Tracks" key={row.MusicID} onClick={ () => {this.TrackChangeMusic(index)}}>
-            <img src={row.Pictures}/>
-            <h5>{row.Titre}</h5>
-            <h5>{row.Auteur}</h5>
-            <h5>{row.Genre}</h5>
+        <div className="player">
+          <div className="musicInfos">
+            <div className="picturesPlayer" style={{
+              backgroundImage: `url(${this.state.currentPictures})`
+            }}>
+            </div>
+            <div className="nameSong">
+              <h5>
+                {
+                  this.state.currentTitre
+                }
+              </h5>
+            </div>
           </div>
 
-        )
-      }
-    </div>
-  </div >
-)
+          <div className="ContentPlayer">
+
+            <div className="indicatorPlayer">
+              <ReplayIcon onClick={this.loop} />
+              <SkipPreviousIcon
+                onClick={this.DownIndex}
+                style={{
+                  color: this.state.currentMusicIndex - 1 < 0 && '#F8F8F8'
+                }} />
+              {
+                !this.state.play
+                  ? <PlayArrowIcon onClick={() => { this.PlayMusic('play') }} />
+                  : <PauseIcon onClick={() => { this.PlayMusic('pause') }} />
+              }
+              <SkipNextIcon onClick={this.UpIndex}
+                style={{
+                  color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
+                }} />
+
+
+            </div>
+            <div className="ProgressBarPlayer">
+              <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange} />
+            </div>
+          </div>
+          <div className="volumeSlider">
+            <Box sx={{ width: '100%' }}>
+              <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                {
+                  this.state.volume > 0
+                    ? <VolumeDown />
+                    : <VolumeOffIcon />
+                }
+
+                <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
+                <VolumeUp />
+              </Stack>
+            </Box>
+            <SkipNextIcon onClick={this.UpIndex}
+              style={{
+                color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
+              }} />
+          </div>
+        </div>
+        <div className="ListOfTracks">
+          {
+            this.state.data.length > 0
+            && this.state.data.map(
+              (row, index) =>
+                <div className="Tracks" key={row.MusicID} onClick={() => { this.TrackChangeMusic(index) }}>
+                  <img src={row.Pictures} />
+                  <h5>{row.Titre}</h5>
+                  <h5>{row.Auteur}</h5>
+                  <h5>{row.Genre}</h5>
+                </div>
+
+            )
+          }
+        </div>
+      </div >
+    )
   }
 }
 
