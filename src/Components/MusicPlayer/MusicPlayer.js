@@ -155,6 +155,7 @@ class MusicPlayer extends Component{
       })
     }
    render(){
+     console.log(this.state.volume)
      setTimeout(() => {
      if (this.state.play){
        this.setState({
@@ -204,7 +205,12 @@ class MusicPlayer extends Component{
 
             <Box sx={{ width: 200 }}>
               <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                <VolumeDown />
+                {
+                  this.state.volume > 0
+                  ? <VolumeDown />
+                : <VolumeOffIcon/>
+                }
+
                 <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
                 <VolumeUp />
               </Stack>
