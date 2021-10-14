@@ -186,10 +186,12 @@ class MusicPlayer extends Component {
     return (
       <div>
         <div className="player">
-          <div className="picturesPlayer" style={{
-            backgroundImage: this.state.data[this.state.musicIndex] && `url(${this.state.data[this.state.musicIndex]['Pictures']})`
-          }}>
-            <div className="NameSong">
+          <div className="musicInfos">
+            <div className="picturesPlayer" style={{
+              backgroundImage: this.state.data[this.state.musicIndex] && `url(${this.state.data[this.state.musicIndex]['Pictures']})`
+            }}>
+            </div>
+            <div className="nameSong">
               <h5>
                 {
                   this.state.data[this.state.musicIndex]
@@ -198,10 +200,9 @@ class MusicPlayer extends Component {
               </h5>
             </div>
           </div>
+
           <div className="ContentPlayer">
-            <div className="ProgressBarPlayer">
-              <SliderMui percentage={this.state.firstLog && this.state.timePlayed / this.state.duration * 100} onChange={this.onChange} />
-            </div>
+
             <div className="indicatorPlayer">
               <ReplayIcon onClick={this.loop} />
               <SkipPreviousIcon
@@ -214,24 +215,34 @@ class MusicPlayer extends Component {
                   ? <PlayArrowIcon onClick={() => { this.PlayMusic('play') }} />
                   : <PauseIcon onClick={() => { this.PlayMusic('pause') }} />
               }
-
-              <Box sx={{ width: 200 }}>
-                <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                  {
-                    this.state.volume > 0
-                      ? <VolumeDown />
-                      : <VolumeOffIcon />
-                  }
-
-                  <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
-                  <VolumeUp />
-                </Stack>
-              </Box>
               <SkipNextIcon onClick={this.UpIndex}
                 style={{
                   color: this.state.musicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
                 }} />
+
+
             </div>
+            <div className="ProgressBarPlayer">
+              <SliderMui percentage={this.state.timePlayed / this.state.duration * 100} onChange={this.onChange} />
+            </div>
+          </div>
+          <div className="volumeSlider">
+            <Box sx={{ width: '100%' }}>
+              <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+                {
+                  this.state.volume > 0
+                    ? <VolumeDown />
+                    : <VolumeOffIcon />
+                }
+
+                <Slider aria-label="Volume" value={this.state.volume} onChange={this.handleChange} />
+                <VolumeUp />
+              </Stack>
+            </Box>
+            <SkipNextIcon onClick={this.UpIndex}
+              style={{
+                color: this.state.musicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
+              }} />
           </div>
         </div>
         <div className="ListOfTracks">
@@ -249,7 +260,7 @@ class MusicPlayer extends Component {
             )
           }
         </div>
-      </div>
+      </div >
 
     )
   }
