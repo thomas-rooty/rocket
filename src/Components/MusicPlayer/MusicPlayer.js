@@ -256,12 +256,10 @@ class MusicPlayer extends Component {
                   <h5>{row.Auteur}</h5>
                   <h5>{row.Genre}</h5>
                 </div>
-
             )
           }
         </div>
       </div >
-
     )
   }
 }
