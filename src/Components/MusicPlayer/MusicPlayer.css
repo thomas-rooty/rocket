@@ -4,7 +4,8 @@
 }
 .player .picturesPlayer {
   height: 300px;
-  background-color: blue;
+  background-size: cover;
+  background-position: center center;
 }
 .player .ContentPlayer .indicatorPlayer {
   display: flex;
