@@ -89,8 +89,9 @@
   position: relative;
   top: 50px;
   overflow: auto;
-  margin-bottom: 149px;
+  margin-bottom: 195px;
   margin-top: 10px;
+  background-color: #D06BF3;
 }
 .CoeurAuMillieu {
   display: flex;
