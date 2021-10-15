@@ -87,6 +87,7 @@ class MusicPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      FavoritePage : false,
       loadedDataMusic: false,
       play: false,
       audio: new Audio(),
@@ -291,6 +292,7 @@ class MusicPlayer extends Component {
         })
         this.setState({
           data : result,
+          FavoritePage : true,
           CurrentUp : false,
           CurrentDown : false,
         })
@@ -298,6 +300,25 @@ class MusicPlayer extends Component {
     )
   }
   addFav(musicID, token){
+    var MusicfindInData = false;
+    this.state.data.map(x => {
+      if(x['MusicID'] === musicID) {
+        MusicfindInData = true;
+      }
+    })
+    if (MusicfindInData === false) {
+      var newArray = this.state.data
+      newArray.unshift({
+        'Auteur' : this.state.currentAuteur,
+        'Album': this.state.currentAlbum,
+        'Genre': this.state.currentGenre,
+        'MusicID' : this.state.currentMusicId,
+        'Pictures' : this.state.currentPictures,
+        'Titre' : this.state.currentTitre,
+        'favorite' : true,
+        'mp3' : this.state.currentmp3,
+      })
+    }
     addFavUser(token,musicID)
     .then(
       x => {
@@ -347,6 +368,20 @@ class MusicPlayer extends Component {
             currentFavorite : false
           })
         }
+        if (this.state.FavoritePage){
+          var y = [];
+          this.state.data.map(
+            x => {
+              if (x['MusicID'] !== musicID){
+                console.log('false')
+                y.push(x)
+              }
+            }
+          )
+          this.setState({
+            data : y
+          })
+        }
       }
     )
   }
@@ -355,7 +390,8 @@ class MusicPlayer extends Component {
     getMusic().then(
       result => {
         this.setState({
-          data : result
+          data : result,
+          favoritePage : false
         })
     })
     .then(
