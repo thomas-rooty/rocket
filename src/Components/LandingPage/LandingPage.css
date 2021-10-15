@@ -1,0 +1,31 @@
+.landingContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../images/bgLoginRegister.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.landingChoice{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #1B041E;
+    height: 25vh;
+    width: 400px;
+    
+    border-radius: 30px;
+}
+
+.landingChoice button{
+    height: 50px;
+    width: 300px;
+    border-radius: 25px;
+    background-color: #90108B;
+    border: none;
+    color: white;
+}
