@@ -29,38 +29,46 @@ export default function Register(props) {
     }
 
     return (
-        <div className="Login">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group size="lg" controlId="pseudo">
-                    <Form.Label>Pseudo</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="text"
-                        value={pseudo}
-                        onChange={(e) => setPseudo(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="email">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </Form.Group>
-                <Button block size="lg" type="submit" disabled={!validateForm()}>
-                    Register
-                </Button>
-            </Form>
+        <div className="ContainerLogin">
+            <div className="Login">
+                <Form onSubmit={handleSubmit}>
+                    <div className="champ">
+                        <Form.Group size="lg" controlId="pseudo">
+                            <Form.Control
+                                autoFocus
+                                type="text"
+                                value={pseudo}
+                                placeholder="Pseudo"
+                                onChange={(e) => setPseudo(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
+                    <div className="champ">
+                        <Form.Group size="lg" controlId="email">
+                            <Form.Control
+                                autoFocus
+                                type="email"
+                                value={email}
+                                placeholder="Email"
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
+                    <div className="champ">
+                        <Form.Group size="lg" controlId="password">
+                            <Form.Control
+                                type="password"
+                                value={password}
+                                placeholder="Password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </Form.Group>
+                    </div>
+                    <button block size="lg" type="submit" disabled={!validateForm()}>
+                        Register
+                    </button>
+                </Form>
+            </div>
         </div>
     );
 }
