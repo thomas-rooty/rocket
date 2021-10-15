@@ -518,7 +518,7 @@ class MusicPlayer extends Component {
               <span></span>
               <span></span>
               <ul id="menu">
-                <p><li>Liste des musiques</li></p>
+                <p onClick={console.log("clicked")}><li>Liste des musiques</li></p>
                 <p onClick={this.GetFavMusicUser}><li>Favoris</li></p>
                 <p onClick={
                     () => {
@@ -529,7 +529,7 @@ class MusicPlayer extends Component {
               </ul>
             </div>
           </nav>
-          <input type="search" id="searchNavbar"onChange={this.searchTracks} />
+          <input type="search" id="searchNavbar" onChange={this.searchTracks} />
         </div>
         <div className="player">
           <div className="musicInfos">
