@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./Login.css";
+import "./Register.css";
 import registerUser from "../../api/registerUser";
 import { login, logout } from "../../utils";
 import { useHistory } from "react-router";
 import { sha512 } from 'js-sha512';
 
-export default function Login(props) {
+export default function Register(props) {
     const history = useHistory();
     const [pseudo, setPseudo] = useState("");
     const [email, setEmail] = useState("");
@@ -21,13 +21,11 @@ export default function Login(props) {
     function handleSubmit(event) {
         event.preventDefault();
         registerUser(pseudo, email, sha512(password))
-            .then(data => {
-                if (data.length > 0) {
-                    history.push({
-                        pathname: '/login'
-                    })
-                }
-            })
+            .then(
+                history.push({
+                    pathname: '/login'
+                })
+            )
     }
 
     return (
