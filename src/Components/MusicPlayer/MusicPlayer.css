@@ -18,7 +18,14 @@ html {
   background-color: #1B041E;
 
 }
-
+.expendInfoSong {
+  display: none;
+}
+.AuteurPlusImgPlustitre {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+}
 .Navbar{
   display: flex;
   justify-content: space-between;
@@ -30,6 +37,11 @@ html {
   height: 50px;
   width: 100%;
   background-color: #1B041E;
+}
+.Navbar img {
+  margin-left: 10%;
+  width: 50px;
+  height: 50;
 }
 #searchNavbar {
   margin-right: 20px;
@@ -64,9 +76,20 @@ html {
   align-items: center;
   width: 60%;
 }
-
-.progressBarPlayer{
+.timerProgressBar {
+  width: 100px;
+  margin-left: 10px;
+}
+.currentTimeProgressBar {
+  width: 100px;
+  margin-right: 10px;
+  text-align: right;
+}
+.ProgressBarPlayer{
   width: 100%;
+  display: flex;
+  justify-content: center;
+  color : white;
 }
 .indicatorPlayer{
   display: flex;
@@ -124,10 +147,9 @@ html {
   color: white;
   display: flex;
   align-items: center;
-  text-align: center;
 }
 .ImgPlusTitreTracks{
-  width: 20%;
+  width: 40%;
   display: flex;
   align-items: center;
   color : white;
@@ -168,8 +190,6 @@ html {
   width: 40px;
   height: 32px;
   position: absolute;
-  top: -7px;
-  left: -5px;
 
   cursor: pointer;
 
@@ -231,9 +251,9 @@ html {
 #menu
 {
   position: absolute;
-  width: 200px;
+  width: 250px;
   margin: -100px 0 0 -50px;
-  padding: 50px;
+  padding: 40px;
   padding-top: 125px;
 
   background: #1B041E;
@@ -246,9 +266,17 @@ html {
 
   transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
 }
-
+#menuToggle #menu p {
+  color :white ;
+  display: flex;
+  margin-left: 10px;
+  margin-bottom: 0px;
+}
 #menu li
 {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
   padding: 15px 0;
   font-size: 23px;
   color : white;

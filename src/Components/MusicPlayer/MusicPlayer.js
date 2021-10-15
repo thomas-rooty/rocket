@@ -12,6 +12,7 @@ import SkipPreviousIcon from '../icons/previous.svg';
 import PlayIcon from '../icons/play.svg';
 import PauseIcon from '../icons/pause.svg';
 import BlankIcon from '../icons/blank.png';
+import Logo from '../icons/1F680.svg';
 
 
 import LoopIcon from '@mui/icons-material/Loop';
@@ -26,6 +27,9 @@ import Box from '@mui/material/Box';
 import SliderMui from '../slider/Slider';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AlbumIcon from '@mui/icons-material/Album';
 
 // api
 import getMusic from '../../api/getMusic';
@@ -34,13 +38,14 @@ import getFavUser from '../../api/getFavUser';
 import addFavUser from '../../api/addFavUser';
 import deleteFavUser from '../../api/deleteFavUser';
 
+
 import { TOKEN_KEY, logout } from "../../utils";
 
 import { withRouter } from 'react-router-dom';
 
 // DEV
 function secondsToHms(seconds) {
-  if (!seconds) return '00m 00s'
+  if (!seconds) return '00:00'
 
   let duration = seconds
   let hours = duration / 3600
@@ -61,9 +66,9 @@ function secondsToHms(seconds) {
   if (parseInt(hours, 10) > 0) {
     return `${parseInt(hours, 10)}h ${min}m ${sec}s`
   } else if (min == 0) {
-    return `00m ${sec}s`
+    return `00:${sec}`
   } else {
-    return `${min}m ${sec}s`
+    return `${min}:${sec}`
   }
 }
 function LinearProgressWithLabel(props) {
@@ -90,7 +95,8 @@ class MusicPlayer extends Component {
       reload: false,
       volume: 100,
       load : false,
-
+      CurrentUp : true,
+      CurrentDown : true,
       currentmp3: '',
       currentPictures: '',
       currentMusicId: '',
@@ -117,9 +123,12 @@ class MusicPlayer extends Component {
     this.GetFavMusicUser = this.GetFavMusicUser.bind(this);
     this.addFav = this.addFav.bind(this);
     this.deleteFav = this.deleteFav.bind(this);
+    this.returnListMusic = this.returnListMusic.bind(this);
   }
   componentDidMount() {
-    this.state.audio.pause()
+    this.setState({
+      audio : new Audio()
+    })
     getMusic().then(
       result => {
         this.setState({
@@ -156,6 +165,8 @@ class MusicPlayer extends Component {
             currentFavorite : this.state.data[this.state.currentMusicIndex]['favorite'],
             currentSongEnd : false,
             audio: new Audio(this.state.data[this.state.currentMusicIndex]['mp3']),
+            CurrentUp : true,
+            CurrentDown : true,
             currentLoop : false,
           }, () => {
             this.state.audio.addEventListener('loadedmetadata', (e) => {
@@ -247,6 +258,8 @@ class MusicPlayer extends Component {
       currentGenre: this.state.data[x]['Genre'],
       currentTitre: this.state.data[x]['Titre'],
       audio: new Audio(this.state.data[x]['mp3']),
+      CurrentUp : true,
+      CurrentDown : true,
       currentLoop : false,
     }, () => {
       this.state.audio.play()
@@ -269,6 +282,7 @@ class MusicPlayer extends Component {
   }
   //FAV
   GetFavMusicUser(){
+    document.getElementById('checkbox').checked = false
     getFavUser(localStorage.getItem(TOKEN_KEY)).then(
       result =>
       {
@@ -276,7 +290,9 @@ class MusicPlayer extends Component {
           x['favorite'] = true
         })
         this.setState({
-          data : result
+          data : result,
+          CurrentUp : false,
+          CurrentDown : false,
         })
       }
     )
@@ -334,7 +350,39 @@ class MusicPlayer extends Component {
       }
     )
   }
-
+  returnListMusic(){
+    document.getElementById('checkbox').checked = false
+    getMusic().then(
+      result => {
+        this.setState({
+          data : result
+        })
+    })
+    .then(
+      getFavUser(localStorage.getItem(TOKEN_KEY)).then(
+        fav => {
+          fav.map(
+            rowfav => {
+              this.state.data.map(
+                x => {
+                  if (x['favorite'] === false || x['favorite'] === undefined ){
+                    if(x['MusicID'] === rowfav['MusicID']){
+                      x['favorite'] = true
+                    } else {
+                      x['favorite'] = false
+                    }
+                  }
+                }
+              )
+              this.setState({
+                data : this.state.data
+              })
+            }
+          )
+        }
+      )
+    )
+  }
 
   detectChangeMusic(x){
     if (x+1 < this.state.data.length) {
@@ -351,6 +399,8 @@ class MusicPlayer extends Component {
         currentTitre: this.state.data[x+1]['Titre'],
         currentFavorite : this.state.data[[x+1]]['favorite'],
         audio: new Audio(this.state.data[x+1]['mp3']),
+        CurrentUp : true,
+        CurrentDown : true,
         currentSongEnd : false,
         currentLoop : false,
         load : true
@@ -375,64 +425,74 @@ class MusicPlayer extends Component {
     }
   }
   UpIndex() {
-    let x = this.state.currentMusicIndex + 1;
-    if (x < this.state.data.length) {
-      this.killAudio(x)
-      this.setState({
-        currentMusicId: this.state.data[x]['MusicId'],
-        currentmp3: this.state.data[x]['mp3'],
-        currentPictures: this.state.data[x]['Pictures'],
-        currentMusicId: this.state.data[x]['MusicID'],
-        currentAlbum: this.state.data[x]['Album'],
-        currentAuteur: this.state.data[x]['Auteur'],
-        currentGenre: this.state.data[x]['Genre'],
-        currentFavorite : this.state.data[x]['favorite'],
-        currentTitre: this.state.data[x]['Titre'],
-        audio: new Audio(this.state.data[x]['mp3']),
-        currentSongEnd : false,
-        currentLoop : false,
-      }, () => {
-        this.state.audio.play()
-        this.state.audio.addEventListener('loadedmetadata', (e) => {
-          this.setState({
-            currentDuration: e.target.duration
+    if (this.state.CurrentUp) {
+      let x = this.state.currentMusicIndex + 1;
+      if (x < this.state.data.length) {
+        this.killAudio(x)
+        this.setState({
+          currentMusicId: this.state.data[x]['MusicId'],
+          currentmp3: this.state.data[x]['mp3'],
+          currentPictures: this.state.data[x]['Pictures'],
+          currentMusicId: this.state.data[x]['MusicID'],
+          currentAlbum: this.state.data[x]['Album'],
+          currentAuteur: this.state.data[x]['Auteur'],
+          currentGenre: this.state.data[x]['Genre'],
+          currentFavorite : this.state.data[x]['favorite'],
+          currentTitre: this.state.data[x]['Titre'],
+          audio: new Audio(this.state.data[x]['mp3']),
+          CurrentUp : true,
+          CurrentDown : true,
+          currentSongEnd : false,
+          currentLoop : false,
+        }, () => {
+          this.state.audio.play()
+          this.state.audio.addEventListener('loadedmetadata', (e) => {
+            this.setState({
+              currentDuration: e.target.duration
+            })
+          })
+          this.state.audio.addEventListener('ended', (e) => {
+            this.detectChangeMusic(this.state.currentMusicIndex)
           })
         })
-        this.state.audio.addEventListener('ended', (e) => {
-          this.detectChangeMusic(this.state.currentMusicIndex)
-        })
-      })
+      }
     }
   }
   DownIndex() {
-    let x = this.state.currentMusicIndex - 1;
-    if (x >= 0) {
-      this.killAudio(x)
-      this.setState({
-        currentMusicId: this.state.data[x]['MusicId'],
-        currentmp3: this.state.data[x]['mp3'],
-        currentPictures: this.state.data[x]['Pictures'],
-        currentMusicId: this.state.data[x]['MusicID'],
-        currentAlbum: this.state.data[x]['Album'],
-        currentAuteur: this.state.data[x]['Auteur'],
-        currentGenre: this.state.data[x]['Genre'],
-        currentTitre: this.state.data[x]['Titre'],
-        currentFavorite : this.state.data[x]['favorite'],
-        audio: new Audio(this.state.data[x]['mp3']),
-        currentSongEnd : false,
-        currentLoop : false,
-      }, () => {
-        this.state.audio.play()
-        this.state.audio.addEventListener('loadedmetadata', (e) => {
-          this.setState({
-            currentDuration: e.target.duration
+    if (this.state.CurrentDown) {
+      let x = this.state.currentMusicIndex - 1;
+      if (x >= 0) {
+        this.killAudio(x)
+        this.setState({
+          currentMusicId: this.state.data[x]['MusicId'],
+          currentmp3: this.state.data[x]['mp3'],
+          currentPictures: this.state.data[x]['Pictures'],
+          currentMusicId: this.state.data[x]['MusicID'],
+          currentAlbum: this.state.data[x]['Album'],
+          currentAuteur: this.state.data[x]['Auteur'],
+          currentGenre: this.state.data[x]['Genre'],
+          currentTitre: this.state.data[x]['Titre'],
+          currentFavorite : this.state.data[x]['favorite'],
+          audio: new Audio(this.state.data[x]['mp3']),
+          CurrentUp : true,
+          CurrentDown : true,
+          currentSongEnd : false,
+          currentLoop : false,
+        }, () => {
+          this.state.audio.play()
+          this.state.audio.addEventListener('loadedmetadata', (e) => {
+            this.setState({
+              currentDuration: e.target.duration
+            })
+          })
+          this.state.audio.addEventListener('ended', (e) => {
+            this.detectChangeMusic(this.state.currentMusicIndex)
           })
         })
-        this.state.audio.addEventListener('ended', (e) => {
-          this.detectChangeMusic(this.state.currentMusicIndex)
-        })
-      })
+      }
     }
+
+
   }
   loop() {
     this.setState({
@@ -506,7 +566,7 @@ class MusicPlayer extends Component {
           currentPlayed: this.state.audio.currentTime
         })
       }
-    }, 500);
+    }, 1000);
     this.state.audio.volume = this.state.volume / 100
     return (
       <div className="Body">
@@ -518,20 +578,25 @@ class MusicPlayer extends Component {
               <span></span>
               <span></span>
               <ul id="menu">
-                <p><li>Liste des musiques</li></p>
-                <p onClick={this.GetFavMusicUser}><li>Favoris</li></p>
+                <p onClick={
+                    this.returnListMusic
+                  }><li><AlbumIcon/> <p>Liste des musiques</p></li></p>
+                <p onClick={
+                    this.GetFavMusicUser
+                  }><li><FavoriteIcon/> <p>Favoris</p></li></p>
                 <p onClick={
                     () => {
                       logout()
                       this.props.history.push('/')
                     }
-                }><li>Deconnexion</li></p>
+                }><li><AccountCircleIcon/> <p>Deconnexion</p></li></p>
               </ul>
             </div>
           </nav>
+          <img src={Logo}/>
           <input type="search" id="searchNavbar"onChange={this.searchTracks} />
         </div>
-        <div className="player">
+        <div className="player" >
           <div className="musicInfos">
             <div className="picturesPlayer" style={{
               backgroundImage: `url(${this.state.currentPictures})`
@@ -543,6 +608,9 @@ class MusicPlayer extends Component {
                   this.state.currentTitre
                 }
               </h5>
+            </div>
+            <div className="expendInfoSong">
+              <ExpandLessIcon/>
             </div>
           </div>
 
@@ -557,6 +625,7 @@ class MusicPlayer extends Component {
               <img src={SkipPreviousIcon}
                 onClick={this.DownIndex}
                 style={{
+                  cursor : 'pointer',
                   color: this.state.currentMusicIndex - 1 < 0 && '#F8F8F8'
                 }} />
               {
@@ -566,6 +635,7 @@ class MusicPlayer extends Component {
               }
               <img src={SkipNextIcon} onClick={this.UpIndex}
                 style={{
+                  cursor : 'pointer',
                   color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
                 }} />
                 {
@@ -577,7 +647,18 @@ class MusicPlayer extends Component {
 
             </div>
             <div className="ProgressBarPlayer" style={{ width: "50%" }}>
+              <div className="currentTimeProgressBar">
+                {
+                  secondsToHms(this.state.currentPlayed)
+                }
+              </div>
               <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange}  />
+              <div className="timerProgressBar">
+                {
+                  secondsToHms(this.state.currentDuration - this.state.currentPlayed)
+                }
+              </div>
+
             </div>
           </div>
           <div className="volumeSlider">
@@ -601,13 +682,14 @@ class MusicPlayer extends Component {
             && this.state.data.map(
               (row, index) =>
               <div>
-                <div className="Tracks" style={{cursor : 'pointer'}}key={row.MusicID} onClick={() => { this.TrackChangeMusic(index) }}>
-                  <div className="ImgPlusTitreTracks">
-                    <img src={row.Pictures} />
-                    <h5 className="titreTest">{row.Titre}</h5>
+                <div className="Tracks" style={{cursor : 'pointer'}}>
+                  <div className="AuteurPlusImgPlustitre" key={row.MusicID} onClick={() => { this.TrackChangeMusic(index) }}>
+                    <div className="ImgPlusTitreTracks">
+                      <img src={row.Pictures} />
+                      <h5 className="titreTest">{row.Titre}</h5>
+                    </div>
+                    <h5 className="AuteurTracks">{row.Auteur}</h5>
                   </div>
-
-                  <h5 className="AuteurTracks">{row.Auteur}</h5>
                     <div className="CoeurAuMillieu">
                     {
                         !row['favorite']
