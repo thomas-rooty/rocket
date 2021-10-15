@@ -1,22 +1,50 @@
+
+.Body{
+  background-color: #D06BF3;
+}
+
 .player {
   display: flex;
   flex-direction: row;
   align-items: center;
+  z-index: 99;
   bottom: 0;
   position: fixed;
   height: 149px;
   width: 100%;
   background-color: #1B041E;
-  
+
 }
 
+.Navbar{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  top: 0;
+  position: fixed;
+  z-index: 98;
+  height: 50px;
+  width: 100%;
+  background-color: #1B041E;
+}
+#searchNavbar {
+  margin-right: 20px;
+  width: 240px;
+  height: 35px;
+  background: #FFFFFF;
+  border-radius: 50px;
+}
 .musicInfos{
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  margin-left: 20px;
   height: 100%;
   width: 20%;
+}
+.musicInfos .nameSong {
+  margin-left: 10px;
 }
 .volumeSlider{
   display: flex;
@@ -41,13 +69,13 @@
   display: flex;
   align-items: center;
   width: 40%;
-  background-color: green;
 }
 .player .picturesPlayer {
   height: 100px;
   min-width: 100px;
   background-size: cover;
   background-position: center center;
+  padding-left: 20px;
 }
 .player .nameSong{
   color: white;
@@ -56,10 +84,173 @@
   display: flex;
   justify-content: center;
 }
+
+.ListOfTracks{
+  position: relative;
+  top: 50px;
+  overflow: auto;
+  margin-bottom: 149px;
+  margin-top: 10px;
+}
+.CoeurAuMillieu {
+  display: flex;
+  align-items: center;
+}
 .Tracks {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #D06BF3;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 2px solid white;
 }
 .Tracks img {
-  max-width: 150px;
-  max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 80px;
+  max-height: 80px;
+}
+.AuteurTracks {
+  width: 20%;
+  color: white;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.ImgPlusTitreTracks{
+  width: 20%;
+  display: flex;
+  align-items: center;
+  color : white;
+}
+.ImgPlusTitreTracks .titreTest {
+  margin-left: 20px;
+}
+
+.titreTest{
+  text-align: left;
+}
+
+#menuToggle
+{
+  display: block;
+  z-index: 1;
+  margin-left: 20px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#menuToggle p
+{
+  text-decoration: none;
+  color: #000;
+
+  transition: color 0.3s ease;
+}
+#menuToggle a:hover
+{
+  color: #4AC3C3;
+}
+
+
+#menuToggle input
+{
+  display: block;
+  width: 40px;
+  height: 32px;
+  position: absolute;
+  top: -7px;
+  left: -5px;
+
+  cursor: pointer;
+
+  opacity: 0;
+  z-index: 2;
+
+  -webkit-touch-callout: none;
+}
+
+#menuToggle span
+{
+  display: block;
+  width: 33px;
+  height: 4px;
+  margin-bottom: 5px;
+  position: relative;
+
+  background: #cdcdcd;
+  border-radius: 3px;
+
+  z-index: 1;
+
+  transform-origin: 4px 0px;
+
+  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+              background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+              opacity 0.55s ease;
+}
+
+#menuToggle span:first-child
+{
+  transform-origin: 0% 0%;
+}
+
+#menuToggle span:nth-last-child(2)
+{
+  transform-origin: 0% 100%;
+}
+
+#menuToggle #checkbox:checked ~ span
+{
+  opacity: 1;
+  transform: rotate(45deg) translate(-2px, -1px);
+  background: #FFF;
+}
+
+#menuToggle #checkbox:checked ~ span:nth-last-child(3)
+{
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+
+#menuToggle #checkbox:checked ~ span:nth-last-child(2)
+{
+  transform: rotate(-45deg) translate(0, -1px);
+}
+
+#menu
+{
+  position: absolute;
+  width: 200px;
+  margin: -100px 0 0 -50px;
+  padding: 50px;
+  padding-top: 125px;
+
+  background: #1B041E;
+  list-style-type: none;
+  -webkit-font-smoothing: antialiased;
+
+
+  transform-origin: 0% 0%;
+  transform: translate(-100%, 0);
+
+  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+
+#menu li
+{
+  padding: 15px 0;
+  font-size: 23px;
+  color : white;
+}
+
+#menuToggle #checkbox:checked ~ ul
+{
+  transform: none;
 }
