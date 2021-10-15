@@ -1,6 +1,7 @@
 import './App.css';
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import Login from './Components/Login/Login';
+import Register from './Components/Register/Register';
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,6 +20,7 @@ function App() {
     <Router>
       <Switch>
         <PublicRoute restricted={false} exact path="/" component={sayHello}/>
+        <PublicRoute restricted={false} exact path="/register" component={Register}/>
         <PublicRoute restricted={true} exact path="/login" component={Login}/>
         <PrivateRoute exact path="/player" component={MusicPlayer}/>
 
