@@ -38,7 +38,8 @@ import { TOKEN_KEY, logout } from "../../utils";
 
 import { withRouter } from 'react-router-dom';
 
-// DEV
+
+
 function secondsToHms(seconds) {
   if (!seconds) return '00m 00s'
 
@@ -509,7 +510,7 @@ class MusicPlayer extends Component {
     }, 500);
     this.state.audio.volume = this.state.volume / 100
     return (
-      <div className="Body">
+      <div>
         <div className="Navbar">
           <nav role="navigation">
             <div id="menuToggle">
@@ -568,16 +569,16 @@ class MusicPlayer extends Component {
                 style={{
                   color: this.state.currentMusicIndex + 1 > this.state.data.length - 1 && '#F8F8F8'
                 }} />
-                {
-                  !this.state.currentFavorite
-                  ? <FavoriteBorderIcon onClick={() => {this.addFav(this.state.currentMusicId, localStorage.getItem(TOKEN_KEY))}} sx={{ fontSize: 50 , color:"white"}}/>
-                : <FavoriteIcon onClick={ () => {this.deleteFav(this.state.currentMusicId, localStorage.getItem(TOKEN_KEY))}} sx={{ fontSize: 50 , color:"white"}}/>
-                }
+              {
+                !this.state.currentFavorite
+                ? <FavoriteBorderIcon onClick={() => {this.addFav(this.state.currentMusicId, localStorage.getItem(TOKEN_KEY))}} sx={{ fontSize: 50 , color:"white"}}/>
+              : <FavoriteIcon onClick={ () => {this.deleteFav(this.state.currentMusicId, localStorage.getItem(TOKEN_KEY))}} sx={{ fontSize: 50 , color:"white"}}/>
+              }
 
 
             </div>
-            <div className="ProgressBarPlayer" style={{ width: "50%" }}>
-              <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange}  />
+            <div className="ProgressBarPlayer">
+              <SliderMui percentage={this.state.firstLog && this.state.currentPlayed / this.state.currentDuration * 100} onChange={this.onChange} style={{ width: 600 }} />
             </div>
           </div>
           <div className="volumeSlider">
@@ -630,4 +631,4 @@ class MusicPlayer extends Component {
 //
 
 // }
-export default MusicPlayer;
+export default withRouter(MusicPlayer);
